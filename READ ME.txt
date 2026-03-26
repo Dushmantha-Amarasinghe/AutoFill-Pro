@@ -1,8 +1,0 @@
-1. Place this folder where you will not delete.
-2. Go to Chrome/extensions [chrome://extensions]
-3. Enable Developer mode
-4. Click on Load unpacked and select this folder
-5. After added to the extensions, go to the extension and fill the necessary details.
-
-
--------------------------------------Refora Technologies------------------------------
