@@ -1,0 +1,71 @@
+{
+  "manifest_version": 3,
+  "name": "AutoFill Pro",
+  "version": "2.0.0",
+  "description": "Universal smart form autofill. Works on any website. Secure, offline, and fully customizable.",
+  "permissions": [
+    "storage",
+    "tabs",
+    "scripting",
+    "activeTab",
+    "contextMenus"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/Autofill logo.png",
+      "48": "icons/Autofill logo.png",
+      "128": "icons/Autofill logo.png"
+    },
+    "default_title": "AutoFill Pro"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "commands": {
+    "trigger-autofill": {
+      "suggested_key": {
+        "default": "Alt+Shift+F",
+        "mac": "Alt+Shift+F"
+      },
+      "description": "Fill the current page form with AutoFill Pro"
+    },
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Alt+Shift+A",
+        "mac": "Alt+Shift+A"
+      }
+    }
+  },
+  "icons": {
+    "16": "icons/Autofill logo.png",
+    "48": "icons/Autofill logo.png",
+    "128": "icons/Autofill logo.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "dashboard.html"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "crypto-utils.js",
+        "storage-api.js",
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}

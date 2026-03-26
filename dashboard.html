@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoFill Pro — Configuration</title>
+  <style>
+    @font-face {
+      font-family: 'PJS';
+      src: local('Plus Jakarta Sans'), url('fonts/PlusJakartaSans-Regular.ttf') format('truetype');
+      font-weight: 400;
+    }
+
+    @font-face {
+      font-family: 'PJS';
+      src: url('fonts/PlusJakartaSans-Medium.ttf') format('truetype');
+      font-weight: 500;
+    }
+
+    @font-face {
+      font-family: 'PJS';
+      src: url('fonts/PlusJakartaSans-SemiBold.ttf') format('truetype');
+      font-weight: 600;
+    }
+
+    @font-face {
+      font-family: 'PJS';
+      src: url('fonts/PlusJakartaSans-Bold.ttf') format('truetype');
+      font-weight: 700;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    :root {
+      --bg: #0C0B09;
+      --sf: #161310;
+      --glass: rgba(26, 22, 15, 0.72);
+      --gb: rgba(240, 160, 60, 0.1);
+      --primary: #E8530A;
+      --pl: rgba(232, 83, 10, 0.14);
+      --pg: rgba(232, 83, 10, 0.28);
+      --orange: #F5A219;
+      --green: #2BA82B;
+      --gl: rgba(43, 168, 43, 0.12);
+      --gg: rgba(43, 168, 43, 0.25);
+      --text: #F4F0E8;
+      --ts: #A89E90;
+      --tm: #5C5248;
+      --bdr: #28231C;
+      --bdh: #3A332A;
+      --r: 14px;
+      --rsm: 9px;
+      --rxs: 6px;
+      --f: 'PJS', 'Plus Jakarta Sans', -apple-system, 'Segoe UI', system-ui, sans-serif;
+    }
+
+    html,
+    body {
+      height: 100%;
+      overflow: hidden
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--f);
+      font-size: 15px;
+      line-height: 1.5;
+      display: flex;
+      flex-direction: column
+    }
+
+    /* HEADER */
+    .hdr {
+      height: 66px;
+      background: rgba(15, 13, 9, 0.9);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--bdr);
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      gap: 16px;
+      flex-shrink: 0;
+      position: relative
+    }
+
+    .hdr::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--pg), transparent)
+    }
+
+    .hdr-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none
+    }
+
+    .hdr-logoimg {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      background: transparent;
+      overflow: hidden;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center
+    }
+
+    .hdr-logoimg img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain
+    }
+
+    .hdr-lt strong {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.3px;
+      display: block
+    }
+
+    .hdr-lt span {
+      font-size: 11px;
+      color: var(--tm);
+      text-transform: uppercase;
+      letter-spacing: 0.5px
+    }
+
+    .hdr-sep {
+      width: 1px;
+      height: 24px;
+      background: var(--bdr)
+    }
+
+    .hdr-title {
+      font-size: 14px;
+      color: var(--ts);
+      font-weight: 500
+    }
+
+    .hdr-acts {
+      margin-left: auto;
+      display: flex;
+      gap: 8px;
+      align-items: center
+    }
+
+    .hbtn {
+      padding: 8px 16px;
+      border-radius: var(--rxs);
+      border: 1px solid var(--bdr);
+      background: var(--glass);
+      color: var(--ts);
+      font-family: var(--f);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all .2s;
+      backdrop-filter: blur(10px)
+    }
+
+    .hbtn:hover {
+      border-color: var(--bdh);
+      color: var(--text)
+    }
+
+    .hbtn.primary {
+      background: linear-gradient(135deg, var(--primary), var(--orange));
+      border-color: transparent;
+      color: #fff;
+      font-weight: 600;
+      box-shadow: 0 2px 12px var(--pg)
+    }
+
+    .hbtn.primary:hover {
+      opacity: .88;
+      transform: translateY(-1px)
+    }
+
+    /* LAYOUT */
+    .layout {
+      display: flex;
+      flex: 1;
+      overflow: hidden
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 240px;
+      background: rgba(12, 10, 7, 0.8);
+      backdrop-filter: blur(20px);
+      border-right: 1px solid var(--bdr);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      overflow-y: auto;
+      padding: 14px 12px
+    }
+
+    .sidebar::-webkit-scrollbar {
+      width: 3px
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: var(--bdr);
+      border-radius: 2px
+    }
+
+    .snav-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--tm);
+      padding: 14px 10px 6px
+    }
+
+    .nitem {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 13px;
+      border-radius: var(--rsm);
+      cursor: pointer;
+      color: var(--ts);
+      font-size: 14px;
+      font-weight: 500;
+      transition: all .15s;
+      border: 1px solid transparent;
+      text-decoration: none;
+      margin-bottom: 3px
+    }
+
+    .nitem svg {
+      flex-shrink: 0;
+      opacity: .7;
+      transition: opacity .15s
+    }
+
+    .nitem .nbadge {
+      margin-left: auto;
+      background: var(--bdr);
+      color: var(--tm);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 20px;
+      min-width: 22px;
+      text-align: center
+    }
+
+    .nitem:hover {
+      background: var(--glass);
+      color: var(--text)
+    }
+
+    .nitem.active {
+      background: var(--pl);
+      border-color: rgba(232, 83, 10, .22);
+      color: #F07040
+    }
+
+    .nitem.active svg {
+      opacity: 1
+    }
+
+    .nitem.active .nbadge {
+      background: var(--pl);
+      color: var(--primary)
+    }
+
+    /* PROFILE CONTEXT BANNER — shows in sidebar under active profile */
+    .profile-ctx {
+      background: var(--pl);
+      border: 1px solid rgba(232, 83, 10, .2);
+      border-radius: var(--rsm);
+      padding: 12px 14px;
+      margin: 10px 0 6px;
+      display: none
+    }
+
+    .profile-ctx.visible {
+      display: block
+    }
+
+    .profile-ctx-row {
+      display: flex;
+      align-items: center;
+      gap: 9px
+    }
+
+    .profile-ctx-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--primary);
+      box-shadow: 0 0 6px var(--primary);
+      flex-shrink: 0
+    }
+
+    .profile-ctx-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap
+    }
+
+    .profile-ctx-sub {
+      font-size: 11px;
+      color: var(--ts);
+      margin-top: 4px
+    }
+
+    .profile-ctx-note {
+      font-size: 11px;
+      color: rgba(232, 83, 10, .7);
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px solid rgba(232, 83, 10, .15)
+    }
+
+    /* MAIN */
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 28px 30px;
+      background: var(--bg)
+    }
+
+    .main::-webkit-scrollbar {
+      width: 5px
+    }
+
+    .main::-webkit-scrollbar-thumb {
+      background: var(--bdr);
+      border-radius: 3px
+    }
+
+    .tpanel {
+      display: none;
+      animation: fadeup .22s ease
+    }
+
+    .tpanel.active {
+      display: block
+    }
+
+    @keyframes fadeup {
+      from {
+        opacity: 0;
+        transform: translateY(6px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    /* PAGE HEADER */
+    .ph {
+      margin-bottom: 24px
+    }
+
+    .ph h1 {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -.5px
+    }
+
+    .ph p {
+      font-size: 14px;
+      color: var(--ts);
+      margin-top: 6px
+    }
+
+    /* CARD */
+    .card {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--gb);
+      border-radius: var(--r);
+      padding: 24px 26px;
+      margin-bottom: 20px
+    }
+
+    .card:hover {
+      border-color: rgba(240, 160, 60, .18)
+    }
+
+    .ctitle {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .ctitle svg {
+      opacity: .65
+    }
+
+    /* INPUTS */
+    .fg {
+      margin-bottom: 16px
+    }
+
+    .flabel {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: var(--ts);
+      margin-bottom: 7px
+    }
+
+    .finput {
+      width: 100%;
+      padding: 12px 14px;
+      background: rgba(10, 8, 5, 0.6);
+      border: 1px solid var(--bdr);
+      border-radius: var(--rsm);
+      color: var(--text);
+      font-family: var(--f);
+      font-size: 14px;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      backdrop-filter: blur(10px)
+    }
+
+    .finput:focus {
+      border-color: rgba(232, 83, 10, .5);
+      box-shadow: 0 0 0 3px var(--pl)
+    }
+
+    .finput::placeholder {
+      color: var(--tm)
+    }
+
+    .fgrid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px
+    }
+
+    /* BUTTONS */
+    .btn {
+      padding: 10px 18px;
+      border-radius: var(--rsm);
+      border: 1px solid var(--bdr);
+      background: var(--glass);
+      color: var(--ts);
+      font-family: var(--f);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: all .18s;
+      backdrop-filter: blur(10px)
+    }
+
+    .btn:hover {
+      border-color: var(--bdh);
+      color: var(--text)
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--orange));
+      border-color: transparent;
+      color: #fff;
+      font-weight: 600;
+      box-shadow: 0 2px 14px var(--pg)
+    }
+
+    .btn-primary:hover {
+      opacity: .88;
+      transform: translateY(-1px)
+    }
+
+    .btn-danger {
+      border-color: rgba(220, 70, 50, .3);
+      color: #E07060;
+      background: rgba(220, 70, 50, .08)
+    }
+
+    .btn-danger:hover {
+      border-color: rgba(220, 70, 50, .6);
+      background: rgba(220, 70, 50, .14)
+    }
+
+    .btn-success {
+      border-color: rgba(43, 168, 43, .3);
+      color: var(--green);
+      background: var(--gl)
+    }
+
+    .btn-success:hover {
+      border-color: rgba(43, 168, 43, .55)
+    }
+
+    .btn-sm {
+      padding: 7px 14px;
+      font-size: 12px;
+      border-radius: var(--rxs)
+    }
+
+    .btn-ico {
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      justify-content: center
+    }
+
+    .brow {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 16px
+    }
+
+    /* PROFILE GRID */
+    .pgrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 16px;
+      margin-top: 6px
+    }
+
+    .pcard {
+      background: var(--glass);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--gb);
+      border-radius: var(--r);
+      padding: 20px;
+      cursor: pointer;
+      transition: all .2s;
+      position: relative;
+      overflow: hidden
+    }
+
+    .pcard::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--cc, var(--primary));
+      border-radius: var(--r) var(--r) 0 0
+    }
+
+    .pcard:hover {
+      border-color: rgba(240, 160, 60, .25);
+      transform: translateY(-2px)
+    }
+
+    .pcard.is-active {
+      border-color: rgba(232, 83, 10, .35)
+    }
+
+    .pcard-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 12px
+    }
+
+    .pavatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 19px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0
+    }
+
+    .pname {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text)
+    }
+
+    .pstat {
+      font-size: 12px;
+      color: var(--tm);
+      margin-top: 3px
+    }
+
+    .active-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: var(--gl);
+      color: var(--green);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(43, 168, 43, .25);
+      letter-spacing: .3px;
+      text-transform: uppercase
+    }
+
+    .pcard-acts {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+      flex-wrap: wrap
+    }
+
+    .add-pcard {
+      background: transparent;
+      border: 1px dashed var(--bdr);
+      border-radius: var(--r);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all .2s;
+      min-height: 125px;
+      color: var(--tm);
+      font-size: 14px;
+      font-weight: 500;
+      font-family: var(--f)
+    }
+
+    .add-pcard:hover {
+      border-color: rgba(232, 83, 10, .45);
+      color: var(--primary);
+      background: var(--pl)
+    }
+
+    /* CUSTOM FIELDS */
+    .cfl {
+      display: flex;
+      flex-direction: column;
+      gap: 10px
+    }
+
+    .cfi {
+      background: rgba(10, 8, 5, 0.5);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--bdr);
+      border-radius: var(--rsm);
+      padding: 13px 16px;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      transition: border-color .2s
+    }
+
+    .cfi:hover {
+      border-color: var(--bdh)
+    }
+
+    .cft-badge {
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+      background: rgba(0, 180, 220, .1);
+      color: #60C0D0;
+      flex-shrink: 0;
+      text-transform: uppercase;
+      letter-spacing: .5px
+    }
+
+    .cft-badge.dropdown {
+      background: rgba(245, 162, 25, .1);
+      color: var(--orange)
+    }
+
+    .cf-label-text {
+      font-size: 14px;
+      color: var(--ts);
+      font-weight: 600
+    }
+
+    .cf-arr {
+      font-size: 13px;
+      color: var(--tm)
+    }
+
+    .cf-val {
+      font-size: 15px;
+      color: var(--text);
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap
+    }
+
+    .drag-h {
+      cursor: grab;
+      color: var(--tm)
+    }
+
+    /* EMPTY STATE */
+    .empty {
+      text-align: center;
+      padding: 46px 20px;
+      color: var(--tm)
+    }
+
+    .empty svg {
+      opacity: .3;
+      margin-bottom: 12px
+    }
+
+    .empty p {
+      font-size: 14px;
+      color: var(--ts);
+      line-height: 1.7
+    }
+
+    /* TOGGLES */
+    .tgl-section {
+      display: flex;
+      flex-direction: column
+    }
+
+    .tgl-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 18px;
+      border-radius: var(--rsm);
+      transition: background .15s
+    }
+
+    .tgl-row:hover {
+      background: rgba(255, 255, 255, .025)
+    }
+
+    .tgl-info .tt {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text)
+    }
+
+    .tgl-info .td {
+      font-size: 12px;
+      color: var(--tm);
+      margin-top: 3px
+    }
+
+    .switch {
+      position: relative;
+      width: 44px;
+      height: 25px;
+      flex-shrink: 0
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0
+    }
+
+    .track {
+      position: absolute;
+      inset: 0;
+      background: var(--bdr);
+      border-radius: 25px;
+      cursor: pointer;
+      transition: background .22s;
+      border: 1px solid rgba(255, 255, 255, .04)
+    }
+
+    .track::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 17px;
+      height: 17px;
+      background: var(--tm);
+      border-radius: 50%;
+      transition: transform .25s cubic-bezier(.34, 1.56, .64, 1), background .22s
+    }
+
+    .switch input:checked+.track {
+      background: var(--primary)
+    }
+
+    .switch input:checked+.track::after {
+      transform: translateX(19px);
+      background: #fff
+    }
+
+    /* HISTORY */
+    .hlist {
+      display: flex;
+      flex-direction: column;
+      gap: 10px
+    }
+
+    .hitem {
+      background: rgba(10, 8, 5, .5);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--bdr);
+      border-radius: var(--rsm);
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 16px
+    }
+
+    .hico {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: var(--pl);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0
+    }
+
+    .hmeta {
+      flex: 1;
+      min-width: 0
+    }
+
+    .hsite {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis
+    }
+
+    .hsub {
+      font-size: 12px;
+      color: var(--tm);
+      margin-top: 3px
+    }
+
+    .hbadge {
+      padding: 4px 11px;
+      border-radius: 20px;
+      background: var(--gl);
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 600;
+      flex-shrink: 0
+    }
+
+    /* MODAL */
+    .modal-ov {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .75);
+      backdrop-filter: blur(8px);
+      z-index: 999;
+      display: none;
+      align-items: center;
+      justify-content: center
+    }
+
+    .modal-ov.show {
+      display: flex;
+      animation: fi .2s ease
+    }
+
+    @keyframes fi {
+      from {
+        opacity: 0
+      }
+
+      to {
+        opacity: 1
+      }
+    }
+
+    .modal {
+      background: var(--glass);
+      backdrop-filter: blur(28px);
+      border: 1px solid var(--gb);
+      border-radius: var(--r);
+      padding: 32px;
+      width: 460px;
+      max-width: 90vw;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, .7);
+      animation: su .25s cubic-bezier(.34, 1.56, .64, 1)
+    }
+
+    @keyframes su {
+      from {
+        transform: translateY(16px);
+        opacity: 0
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1
+      }
+    }
+
+    .modal-title {
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 22px
+    }
+
+    .modal-foot {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 22px
+    }
+
+    .color-opts {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap
+    }
+
+    .copt {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all .15s
+    }
+
+    .copt.selected,
+    .copt:hover {
+      border-color: #fff;
+      transform: scale(1.12)
+    }
+
+    /* TYPE BTNS */
+    .tbselector {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px
+    }
+
+    .tbtn {
+      flex: 1;
+      padding: 10px;
+      border-radius: var(--rxs);
+      border: 1px solid var(--bdr);
+      background: transparent;
+      color: var(--ts);
+      font-family: var(--f);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all .18s;
+      text-align: center
+    }
+
+    .tbtn.active {
+      border-color: rgba(232, 83, 10, .45);
+      background: var(--pl);
+      color: var(--primary)
+    }
+
+    /* SETTINGS */
+    .sg {
+      margin-bottom: 24px
+    }
+
+    .sg-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--tm);
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--bdr)
+    }
+
+    .kbdrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      background: rgba(10, 8, 5, .5);
+      border: 1px solid var(--bdr);
+      border-radius: var(--rsm);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ts);
+      margin-bottom: 10px
+    }
+
+    .kbdrow .kgroup {
+      margin-left: auto;
+      display: flex;
+      gap: 5px
+    }
+
+    kbd {
+      background: rgba(20, 17, 12, .8);
+      border: 1px solid var(--bdr);
+      border-bottom: 2px solid var(--bdh);
+      border-radius: 5px;
+      padding: 3px 8px;
+      font-family: var(--f);
+      font-size: 12px;
+      color: var(--ts)
+    }
+
+    .div {
+      height: 1px;
+      background: var(--bdr);
+      margin: 20px 0
+    }
+
+    /* RULE */
+    .ritem {
+      background: rgba(10, 8, 5, .5);
+      border: 1px solid var(--bdr);
+      border-radius: var(--rsm);
+      padding: 13px 17px;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      margin-bottom: 9px
+    }
+
+    .rurl {
+      font-size: 13px;
+      color: #60C0D0;
+      flex: 1;
+      font-family: monospace
+    }
+
+    .rprof {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text)
+    }
+
+    /* TOAST */
+    #toast-s {
+      position: fixed;
+      bottom: 22px;
+      right: 22px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 7px
+    }
+
+    .toast {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--bdr);
+      border-radius: 10px;
+      padding: 11px 17px;
+      font-size: 13px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, .6);
+      transform: translateX(110%);
+      transition: transform .35s cubic-bezier(.34, 1.56, .64, 1);
+      min-width: 210px
+    }
+
+    .toast.show {
+      transform: translateX(0)
+    }
+
+    .toast.ts {
+      border-left: 3px solid var(--green)
+    }
+
+    .toast.te {
+      border-left: 3px solid #E07060
+    }
+
+    .toast.ti {
+      border-left: 3px solid var(--primary)
+    }
+
+    ::-webkit-scrollbar {
+      width: 5px
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--bdr);
+      border-radius: 3px
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="hdr">
+    <a class="hdr-logo" href="#">
+      <div class="hdr-logoimg"><img src="logo.png" alt="AutoFill Pro"></div>
+      <div class="hdr-lt"><strong>AutoFill Pro</strong><span>by Refora Technologies</span></div>
+    </a>
+    <div class="hdr-sep"></div>
+    <span class="hdr-title">Advanced Configuration</span>
+    <div class="hdr-acts">
+      <button class="hbtn" id="btn-export">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="7 10 12 15 17 10" />
+          <line x1="12" y1="15" x2="12" y2="3" />
+        </svg>
+        Export
+      </button>
+      <label class="hbtn" style="cursor:pointer" for="inp-import">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="7 10 12 5 17 10" />
+          <line x1="12" y1="5" x2="12" y2="16" />
+        </svg>
+        Import<input type="file" id="inp-import" accept=".json" style="display:none">
+      </label>
+      <button class="hbtn primary" id="btn-save-all">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round">
+          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+          <polyline points="17 21 17 13 7 13 7 21" />
+          <polyline points="7 3 7 8 15 8" />
+        </svg>
+        Save All
+      </button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <!-- SIDEBAR -->
+    <nav class="sidebar">
+      <div class="snav-label">Profiles</div>
+      <a class="nitem active" data-tab="profiles" href="#">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+        My Profiles <span class="nbadge" id="badge-p">1</span>
+      </a>
+
+      <!-- Active Profile Context — always visible under profiles to clarify context -->
+      <div class="profile-ctx visible" id="sidebar-ctx">
+        <div class="profile-ctx-row">
+          <div class="profile-ctx-dot" id="ctx-dot"></div>
+          <div class="profile-ctx-name" id="ctx-name">My Profile</div>
+        </div>
+        <div class="profile-ctx-sub">Fields below belong to this profile</div>
+        <div class="profile-ctx-note">Switch profile on "My Profiles" tab</div>
+      </div>
+
+      <div class="snav-label">Fields</div>
+      <a class="nitem" data-tab="my-fields" href="#">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
+        </svg>
+        Built-in Fields
+      </a>
+      <a class="nitem" data-tab="custom-fields" href="#">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round">
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+        Custom Fields <span class="nbadge" id="badge-cf">0</span>
+      </a>
+
+      <div class="snav-label">Automation</div>
+      <a class="nitem" data-tab="url-rules" href="#">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round">
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+        </svg>
+        URL Rules <span class="nbadge" id="badge-r">0</span>
+      </a>
+
+      <div class="snav-label">Logs &amp; Settings</div>
+      <a class="nitem" data-tab="history" href="#">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round">
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="12 6 12 12 16 14" />
+        </svg>
+        Fill History <span class="nbadge" id="badge-h">0</span>
+      </a>
+      <a class="nitem" data-tab="settings" href="#">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round">
+          <circle cx="12" cy="12" r="3" />
+          <path d="M19.07 4.93A10 10 0 0 0 3 12v1a10 10 0 1 0 10-11" />
+        </svg>
+        Settings
+      </a>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="main">
+
+      <!-- PROFILES -->
+      <div class="tpanel active" id="tab-profiles">
+        <div class="ph">
+          <h1>My Profiles</h1>
+          <p>Each profile has its own set of built-in and custom fields. The <strong style="color:var(--primary)">active
+              profile</strong> is what AutoFill Pro uses when filling forms.</p>
+        </div>
+        <div class="pgrid" id="profiles-grid"></div>
+      </div>
+
+      <!-- BUILT-IN FIELDS -->
+      <div class="tpanel" id="tab-my-fields">
+        <div class="ph">
+          <h1>Built-in Fields</h1>
+          <div id="editing-banner"
+            style="display:inline-flex;align-items:center;gap:8px;background:var(--pl);border:1px solid rgba(232,83,10,.25);border-radius:var(--rxs);padding:6px 12px;font-size:12px;color:#F07040;margin-top:8px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+            Editing: <strong id="editing-name" style="color:var(--text)">My Profile</strong>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ctitle"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>Personal Information</div>
+          <div class="fgrid">
+            <div class="fg"><label class="flabel">First Name</label><input class="finput" id="f-firstName"
+                placeholder="e.g. Refora"></div>
+            <div class="fg"><label class="flabel">Last Name</label><input class="finput" id="f-lastName"
+                placeholder="e.g. Technologies"></div>
+            <div class="fg"><label class="flabel">Email Address</label><input class="finput" id="f-email" type="email"
+                placeholder="you@example.com"></div>
+            <div class="fg"><label class="flabel">Mobile / Phone</label><input class="finput" id="f-mobile" type="tel"
+                placeholder="+94 77 123 4567"></div>
+            <div class="fg"><label class="flabel">NIC / National ID</label><input class="finput" id="f-nic"
+                placeholder="200014501234"></div>
+            <div class="fg"><label class="flabel">WhatsApp Number</label><input class="finput" id="f-whatsapp"
+                type="tel" placeholder="+94 77 123 4567"></div>
+            <div class="fg"><label class="flabel">Land / Home Phone</label><input class="finput" id="f-landphone"
+                type="tel" placeholder="+94 11 234 5678"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ctitle"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round">
+              <rect x="2" y="7" width="20" height="14" rx="2" />
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+            </svg>Professional Information</div>
+          <div class="fgrid">
+            <div class="fg"><label class="flabel">Organization / Institution</label><input class="finput"
+                id="f-organization" placeholder="e.g. Java Institute"></div>
+            <div class="fg"><label class="flabel">Job Title / Designation</label><input class="finput" id="f-jobTitle"
+                placeholder="e.g. Software Engineer"></div>
+            <div class="fg"><label class="flabel">City</label><input class="finput" id="f-city"
+                placeholder="e.g. Colombo"></div>
+            <div class="fg"><label class="flabel">Country</label><input class="finput" id="f-country"
+                placeholder="e.g. Sri Lanka"></div>
+          </div>
+        </div>
+        <div class="brow">
+          <button class="btn btn-primary" id="btn-save-fields">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+              <polyline points="17 21 17 13 7 13 7 21" />
+            </svg>
+            Save Profile Data
+          </button>
+          <span id="save-status" style="font-size:12px;color:var(--tm)"></span>
+        </div>
+      </div>
+
+      <!-- CUSTOM FIELDS -->
+      <div class="tpanel" id="tab-custom-fields">
+        <div class="ph">
+          <h1>Custom Fields</h1>
+          <div id="cf-editing-banner"
+            style="display:inline-flex;align-items:center;gap:8px;background:var(--pl);border:1px solid rgba(232,83,10,.25);border-radius:var(--rxs);padding:6px 12px;font-size:12px;color:#F07040;margin-top:8px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+            Adding to: <strong id="cf-editing-name" style="color:var(--text)">My Profile</strong>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ctitle"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>Add New Custom Field</div>
+          <div class="tbselector" id="type-selector">
+            <button class="tbtn active" data-type="text">Text</button>
+            <button class="tbtn" data-type="dropdown">Dropdown</button>
+            <button class="tbtn" data-type="email">Email</button>
+            <button class="tbtn" data-type="phone">Phone</button>
+          </div>
+          <div class="fgrid">
+            <div class="fg"><label class="flabel">Match Label <span style="color:var(--tm)">— what to look
+                  for</span></label><input class="finput" id="cf-label" placeholder="e.g. Branch, Student ID, District">
+            </div>
+            <div class="fg"><label class="flabel">Value <span style="color:var(--tm)">— what to
+                  fill</span></label><input class="finput" id="cf-value" placeholder="e.g. Colombo, 12345, Western">
+            </div>
+          </div>
+          <div class="fg"><label class="flabel">Aliases <span style="color:var(--tm)">— optional comma-separated
+                alternatives</span></label><input class="finput" id="cf-aliases"
+              placeholder="e.g. location, area, zone"></div>
+          <div class="brow"><button class="btn btn-primary" id="btn-add-cf"><svg width="13" height="13"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>Add Field</button></div>
+        </div>
+        <div class="card">
+          <div class="ctitle"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round">
+              <line x1="8" y1="6" x2="21" y2="6" />
+              <line x1="8" y1="12" x2="21" y2="12" />
+              <line x1="8" y1="18" x2="21" y2="18" />
+              <line x1="3" y1="6" x2="3.01" y2="6" />
+              <line x1="3" y1="12" x2="3.01" y2="12" />
+              <line x1="3" y1="18" x2="3.01" y2="18" />
+            </svg>Your Custom Fields</div>
+          <div class="cfl" id="cf-list">
+            <div class="empty"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.5" stroke-linecap="round">
+                <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" />
+              </svg>
+              <p>No custom fields yet.<br>Add your first one above.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- URL RULES -->
+      <div class="tpanel" id="tab-url-rules">
+        <div class="ph">
+          <h1>URL Rules</h1>
+          <p>Auto-switch to a specific profile when visiting a URL pattern.</p>
+        </div>
+        <div class="card">
+          <div class="ctitle"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>Add Rule</div>
+          <div class="fgrid">
+            <div class="fg"><label class="flabel">URL Pattern</label><input class="finput" id="rule-url"
+                placeholder="e.g. zoom.us, google.com"></div>
+            <div class="fg"><label class="flabel">Use Profile</label><select class="finput" id="rule-profile">
+                <option value="">Select profile…</option>
+              </select></div>
+          </div>
+          <div class="brow"><button class="btn btn-primary" id="btn-add-rule"><svg width="13" height="13"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>Add Rule</button></div>
+        </div>
+        <div class="card">
+          <div class="ctitle"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+            </svg>Active Rules</div>
+          <div id="rules-list">
+            <div class="empty"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.5" stroke-linecap="round">
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+              </svg>
+              <p>No rules yet.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HISTORY -->
+      <div class="tpanel" id="tab-history">
+        <div class="ph">
+          <h1>Fill History</h1>
+          <p>Log of your recent autofill events — last 50 entries.</p>
+        </div>
+        <div class="card">
+          <div class="ctitle" style="justify-content:space-between">
+            <span style="display:flex;align-items:center;gap:8px"><svg width="15" height="15" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>Recent Activity</span>
+            <button class="btn btn-danger btn-sm" id="btn-clear-hist">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round">
+                <polyline points="3 6 5 6 21 6" />
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+                <path d="M10 11v6" />
+                <path d="M14 11v6" />
+              </svg>
+              Clear All
+            </button>
+          </div>
+          <div class="hlist" id="hist-list">
+            <div class="empty"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.5" stroke-linecap="round">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+              <p>No fill history yet.<br>Start autofilling forms to see events here.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div class="tpanel" id="tab-settings">
+        <div class="ph">
+          <h1>Settings</h1>
+          <p>Configure behaviour, shortcuts and data management.</p>
+        </div>
+        <div class="sg">
+          <div class="sg-title">Autofill Behaviour</div>
+          <div class="card" style="padding:6px 14px">
+            <div class="tgl-section">
+              <div class="tgl-row">
+                <div class="tgl-info">
+                  <div class="tt">Auto-fill on Page Load</div>
+                  <div class="td">Fill forms automatically as pages finish loading</div>
+                </div><label class="switch"><input type="checkbox" id="s-load"><span class="track"></span></label>
+              </div>
+              <div class="tgl-row">
+                <div class="tgl-info">
+                  <div class="tt">Auto-submit After Fill</div>
+                  <div class="td">Click the submit button automatically after filling</div>
+                </div><label class="switch"><input type="checkbox" id="s-submit"><span class="track"></span></label>
+              </div>
+              <div class="tgl-row">
+                <div class="tgl-info">
+                  <div class="tt">Highlight Fields Before Filling</div>
+                  <div class="td">Show a warm glow on fields before they get filled</div>
+                </div><label class="switch"><input type="checkbox" id="s-hl"><span class="track"></span></label>
+              </div>
+              <div class="tgl-row">
+                <div class="tgl-info">
+                  <div class="tt">Skip Already-Filled Fields</div>
+                  <div class="td">Don't overwrite fields that already have a value</div>
+                </div><label class="switch"><input type="checkbox" id="s-skip"><span class="track"></span></label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="sg">
+          <div class="sg-title">Keyboard Shortcuts</div>
+          <div class="card" style="padding:8px">
+            <div class="kbdrow">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round">
+                <rect x="2" y="4" width="20" height="16" rx="3" />
+              </svg>
+              Fill current page<div class="kgroup"><kbd>Alt</kbd><kbd>Shift</kbd><kbd>F</kbd></div>
+            </div>
+            <div class="kbdrow">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round">
+                <rect x="2" y="4" width="20" height="16" rx="3" />
+              </svg>
+              Open popup<div class="kgroup"><kbd>Alt</kbd><kbd>Shift</kbd><kbd>A</kbd></div>
+            </div>
+          </div>
+        </div>
+        <div class="sg">
+          <div class="sg-title">Data Management</div>
+          <div class="brow">
+            <button class="btn" id="s-export"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>Export All Data</button>
+            <label class="btn" style="cursor:pointer" for="s-import"><svg width="13" height="13" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 5 17 10" />
+                <line x1="12" y1="5" x2="12" y2="16" />
+              </svg>Import Data<input type="file" id="s-import" accept=".json" style="display:none"></label>
+          </div>
+          <div class="div"></div>
+          <div class="brow">
+            <button class="btn btn-danger" id="s-reset"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <polyline points="3 6 5 6 21 6" />
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+              </svg>Reset All Data</button>
+            <span style="font-size:12px;color:var(--tm)">Irreversible — deletes all profiles and settings.</span>
+          </div>
+        </div>
+        <div class="sg">
+          <div class="sg-title">About</div>
+          <div class="card" style="display:flex;align-items:center;gap:16px">
+            <div
+              style="width:52px;height:52px;border-radius:8px;background:transparent;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center">
+              <img src="logo.png" style="width:100%;height:100%;object-fit:contain;transform:scale(1.15)"></div>
+            <div>
+              <div style="font-size:18px;font-weight:700">AutoFill Pro</div>
+              <div style="font-size:14px;color:var(--tm)">Version 2.0.0 · by Refora Technologies</div>
+              <div style="font-size:13px;color:var(--tm);margin-top:5px">All data encrypted with AES-256-GCM — stored
+                locally, never sent anywhere.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- PROFILE MODAL -->
+  <div class="modal-ov" id="prof-modal">
+    <div class="modal">
+      <div class="modal-title" id="modal-title">Create New Profile</div>
+      <div class="fg"><label class="flabel">Profile Name</label><input class="finput" id="modal-pname"
+          placeholder="e.g. Work, Personal, University"></div>
+      <div class="fg"><label class="flabel">Color</label>
+        <div class="color-opts" id="color-opts"></div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn" id="modal-cancel">Cancel</button>
+        <button class="btn btn-primary" id="modal-confirm">Create Profile</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-s"></div>
+  <script src="crypto-utils.js"></script>
+  <script src="storage-api.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+
+</html>
