@@ -4,7 +4,7 @@
 
 AutoFill Pro is a highly secure, proprietary form-filling browser extension meticulously designed and engineered by **Refora Technologies**. It is built with a strict privacy-first architecture, ensuring your data is kept fully encrypted and offline. 
 
-## 🔒 Security & Source Code Policy
+##  Security & Source Code Policy
 
 At Refora Technologies, we believe in absolute transparency, especially when it comes to tools handling your personal or sensitive information. **We have made the source code of AutoFill Pro openly viewable in this repository so that anyone can inspect it and verify its security. You are encouraged to review the code to ensure there is no malicious behavior, tracking, or data mishandling.**
 
@@ -14,7 +14,7 @@ At Refora Technologies, we believe in absolute transparency, especially when it 
 
 For detailed terms, please see the enclosed [`LICENSE`](LICENSE) file.
 
-## 🚀 Installation Guide
+##  Installation Guide
 
 To install AutoFill Pro as an unpacked extension folder in Google Chrome (or Chromium-based browsers), please follow these steps:
 
@@ -25,7 +25,7 @@ To install AutoFill Pro as an unpacked extension folder in Google Chrome (or Chr
 5. **Select the Folder:** Browse to and select the folder containing this extension.
 6. **Setup & Start:** Once added, click the AutoFill Pro icon in your browser toolbar to open the dashboard, fill in your necessary details, and start automating your workflow!
 
-## ⌨️ Shortcuts
+##  Shortcuts
 - **Trigger AutoFill on Current Page:** `Alt + Shift + F`
 - **Open Extension Menu:** `Alt + Shift + A`
 
