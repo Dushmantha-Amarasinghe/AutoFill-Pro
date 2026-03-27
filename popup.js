@@ -37,13 +37,39 @@ async function loadData() {
     const activeId = appData.activeProfileId || 'default';
 
     // Render profiles
-    profileSelect.innerHTML = '';
+    const selectItems = document.getElementById('profile-select-items');
+    const selectDisplay = document.getElementById('profile-select-display');
+    const hiddenInput = document.getElementById('profile-select');
+    selectItems.innerHTML = '';
+    
     profiles.forEach(p => {
-      const opt = document.createElement('option');
-      opt.value = p.id;
-      opt.textContent = p.name;
-      opt.selected = p.id === activeId;
-      profileSelect.appendChild(opt);
+      const o = document.createElement('div');
+      o.textContent = p.name;
+      o.dataset.value = p.id;
+      if (p.id === activeId) {
+        o.classList.add('same-as-selected');
+        selectDisplay.textContent = p.name;
+        hiddenInput.value = p.id;
+      }
+      o.addEventListener('click', async function(e) {
+        e.stopPropagation();
+        selectDisplay.textContent = p.name;
+        hiddenInput.value = p.id;
+        
+        const same = selectItems.querySelector('.same-as-selected');
+        if (same) same.classList.remove('same-as-selected');
+        o.classList.add('same-as-selected');
+        
+        selectItems.classList.add('select-hide');
+        selectDisplay.classList.remove('open');
+        
+        if (p.color) {
+          profileDot.style.background = p.color;
+          profileDot.style.boxShadow = `0 0 8px ${p.color}`;
+        }
+        await StorageAPI.setActiveProfile(p.id);
+      });
+      selectItems.appendChild(o);
     });
 
     // Update profile dot color
@@ -123,14 +149,20 @@ btnFill.addEventListener('click', async () => {
 });
 
 // ─── Profile Switch ───────────────────────────────────────────────────────────
-profileSelect.addEventListener('change', async () => {
-  const selectedId = profileSelect.value;
-  const selected = profiles.find(p => p.id === selectedId);
-  if (selected?.color) {
-    profileDot.style.background = selected.color;
-    profileDot.style.boxShadow = `0 0 8px ${selected.color}`;
+document.getElementById('profile-select-display')?.addEventListener('click', function(e) {
+  e.stopPropagation();
+  const items = document.getElementById('profile-select-items');
+  items.classList.toggle('select-hide');
+  this.classList.toggle('open');
+});
+
+document.addEventListener('click', function(e) {
+  const selectDisplay = document.getElementById('profile-select-display');
+  const selectItems = document.getElementById('profile-select-items');
+  if (selectDisplay && selectItems && e.target !== selectDisplay) {
+    selectItems.classList.add('select-hide');
+    selectDisplay.classList.remove('open');
   }
-  await StorageAPI.setActiveProfile(selectedId);
 });
 
 // ─── Toggles ──────────────────────────────────────────────────────────────────

@@ -468,6 +468,86 @@
       gap: 16px
     }
 
+    /* CUSTOM SELECT */
+    .custom-select {
+      position: relative;
+      width: 100%;
+    }
+    .select-selected {
+      width: 100%;
+      padding: 12px 14px;
+      background: rgba(10, 8, 5, 0.6);
+      border: 1px solid var(--bdr);
+      border-radius: var(--rsm);
+      color: var(--text);
+      font-family: var(--f);
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      backdrop-filter: blur(10px);
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .select-selected.placeholder {
+      color: var(--tm);
+    }
+    .select-selected:hover, .select-selected.open {
+      border-color: rgba(232, 83, 10, .5);
+    }
+    .select-selected.open {
+      box-shadow: 0 0 0 3px var(--pl);
+    }
+    .select-selected::after {
+      content: '';
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid var(--tm);
+      transition: transform .2s;
+    }
+    .select-selected.open::after {
+      transform: rotate(180deg);
+    }
+    .select-items {
+      position: absolute;
+      background: var(--glass);
+      backdrop-filter: blur(28px);
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      z-index: 99;
+      border: 1px solid var(--bdr);
+      border-radius: var(--rsm);
+      max-height: 200px;
+      overflow-y: auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      padding: 4px;
+      gap: 2px;
+    }
+    .select-hide {
+      display: none !important;
+    }
+    .select-items div {
+      padding: 10px 14px;
+      cursor: pointer;
+      border-radius: var(--rxs);
+      font-size: 14px;
+      color: var(--ts);
+      transition: all .15s;
+    }
+    .select-items div:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+    }
+    .select-items div.same-as-selected {
+      color: var(--primary);
+      background: var(--pl);
+      font-weight: 600;
+    }
+
     /* BUTTONS */
     .btn {
       padding: 10px 18px;
@@ -1405,9 +1485,14 @@
           <div class="fgrid">
             <div class="fg"><label class="flabel">URL Pattern</label><input class="finput" id="rule-url"
                 placeholder="e.g. zoom.us, google.com"></div>
-            <div class="fg"><label class="flabel">Use Profile</label><select class="finput" id="rule-profile">
-                <option value="">Select profile…</option>
-              </select></div>
+            <div class="fg">
+              <label class="flabel">Use Profile</label>
+              <div class="custom-select" id="rule-profile-container">
+                <div class="select-selected placeholder" id="rule-profile-display">Select profile…</div>
+                <div class="select-items select-hide" id="rule-profile-items"></div>
+              </div>
+              <input type="hidden" id="rule-profile" value="">
+            </div>
           </div>
           <div class="brow"><button class="btn btn-primary" id="btn-add-rule"><svg width="13" height="13"
                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">

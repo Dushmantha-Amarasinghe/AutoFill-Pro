@@ -136,7 +136,12 @@
     }
     .profile-meta { flex: 1; min-width: 0; }
     .profile-label { font-size: 10px; color: var(--text-muted); font-weight: 500; letter-spacing: 0.3px; }
-    .profile-select {
+    .custom-select {
+      position: relative;
+      width: 100%;
+      margin-top: 2px;
+    }
+    .select-selected {
       width: 100%;
       background: transparent;
       border: none;
@@ -148,8 +153,62 @@
       outline: none;
       padding: 0;
       line-height: 1.3;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
-    .profile-select option { background: #1E1A13; color: var(--text); }
+    .select-selected::after {
+      content: '';
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid var(--text-sec);
+      transition: transform .2s;
+    }
+    .select-selected.open::after {
+      transform: rotate(180deg);
+    }
+    .select-items {
+      position: absolute;
+      background: rgba(20, 17, 12, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      top: calc(100% + 8px);
+      left: -10px;
+      right: -10px;
+      z-index: 99;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      max-height: 200px;
+      overflow-y: auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      padding: 4px;
+      gap: 2px;
+    }
+    .select-hide {
+      display: none !important;
+    }
+    .select-items div {
+      padding: 8px 12px;
+      cursor: pointer;
+      border-radius: var(--radius-xs);
+      font-size: 13px;
+      font-family: var(--font);
+      color: var(--text-sec);
+      transition: all .15s;
+    }
+    .select-items div:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+    }
+    .select-items div.same-as-selected {
+      color: var(--primary);
+      background: var(--primary-low);
+      font-weight: 600;
+    }
+    .select-items::-webkit-scrollbar { width: 4px; }
+    .select-items::-webkit-scrollbar-thumb { background: var(--border-hi); border-radius: 2px; }
 
     /* ── Body ────────────────────────────────── */
     .body { padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; }
@@ -355,9 +414,11 @@
       <div class="profile-indicator" id="profile-indicator"></div>
       <div class="profile-meta">
         <div class="profile-label">ACTIVE PROFILE</div>
-        <select class="profile-select" id="profile-select">
-          <option>Loading…</option>
-        </select>
+        <div class="custom-select" id="profile-select-container">
+          <div class="select-selected" id="profile-select-display">Loading…</div>
+          <div class="select-items select-hide" id="profile-select-items"></div>
+        </div>
+        <input type="hidden" id="profile-select" value="default">
       </div>
     </div>
   </div>

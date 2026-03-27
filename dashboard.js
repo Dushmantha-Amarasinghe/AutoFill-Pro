@@ -294,10 +294,49 @@ function renderCF() {
 
 // ── URL Rules ────────────────────────────────────
 function populateRuleSel() {
-  const s=document.getElementById('rule-profile');
-  s.innerHTML='<option value="">Select profile…</option>';
-  appData.profiles.forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.name;s.appendChild(o);});
+  const container = document.getElementById('rule-profile-items');
+  const display = document.getElementById('rule-profile-display');
+  const hiddenInput = document.getElementById('rule-profile');
+  container.innerHTML = '';
+  appData.profiles.forEach(p => {
+    const o = document.createElement('div');
+    o.textContent = p.name;
+    o.dataset.value = p.id;
+    if (hiddenInput.value === p.id) {
+      o.classList.add('same-as-selected');
+      display.textContent = p.name;
+      display.classList.remove('placeholder');
+    }
+    o.addEventListener('click', function(e) {
+      e.stopPropagation();
+      display.textContent = p.name;
+      display.classList.remove('placeholder');
+      hiddenInput.value = p.id;
+      const same = container.querySelector('.same-as-selected');
+      if (same) same.classList.remove('same-as-selected');
+      o.classList.add('same-as-selected');
+      container.classList.add('select-hide');
+      display.classList.remove('open');
+    });
+    container.appendChild(o);
+  });
 }
+
+document.getElementById('rule-profile-display')?.addEventListener('click', function(e) {
+  e.stopPropagation();
+  const items = document.getElementById('rule-profile-items');
+  items.classList.toggle('select-hide');
+  this.classList.toggle('open');
+});
+
+document.addEventListener('click', function(e) {
+  const selectDisplay = document.getElementById('rule-profile-display');
+  const selectItems = document.getElementById('rule-profile-items');
+  if (selectDisplay && selectItems && e.target !== selectDisplay) {
+    selectItems.classList.add('select-hide');
+    selectDisplay.classList.remove('open');
+  }
+});
 async function renderRules() {
   populateRuleSel();
   const rules=appData.urlRules||[];
@@ -323,6 +362,12 @@ document.getElementById('btn-add-rule').addEventListener('click',async()=>{
   appData.urlRules.push({urlPattern:url,profileId:pid});
   await StorageAPI.saveUrlRules(appData.urlRules);
   document.getElementById('rule-url').value='';
+  document.getElementById('rule-profile').value='';
+  const display = document.getElementById('rule-profile-display');
+  display.textContent = 'Select profile…';
+  display.classList.add('placeholder');
+  const same = document.getElementById('rule-profile-items').querySelector('.same-as-selected');
+  if(same) same.classList.remove('same-as-selected');
   updateBadges();renderRules();toast('Rule added');
 });
 
