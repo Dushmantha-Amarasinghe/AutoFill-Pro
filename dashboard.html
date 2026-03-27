@@ -1210,6 +1210,122 @@
       background: var(--bdr);
       border-radius: 3px
     }
+
+    /* ONBOARDING TOUR */
+    .dtour-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      background: rgba(14, 12, 8, 0.96);
+      backdrop-filter: blur(28px);
+      border-top: 1px solid rgba(240, 160, 60, 0.18);
+      padding: 20px 28px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 -8px 40px rgba(0,0,0,0.7);
+      animation: slideup .35s cubic-bezier(.34,1.1,.64,1);
+    }
+    @keyframes slideup {
+      from { transform: translateY(100%); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+    .dtour-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--pl);
+      border: 1px solid rgba(232,83,10,.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 20px;
+    }
+    .dtour-content {
+      flex: 1;
+      min-width: 0;
+    }
+    .dtour-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 3px;
+    }
+    .dtour-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .dtour-body {
+      font-size: 13px;
+      color: var(--ts);
+      line-height: 1.5;
+    }
+    .dtour-body strong { color: var(--text); }
+    .dtour-nav {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+    .dtour-dots {
+      display: flex;
+      gap: 5px;
+      margin-right: 4px;
+    }
+    .dtour-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--bdr);
+      transition: all 0.2s;
+    }
+    .dtour-dot.active {
+      background: var(--primary);
+      width: 18px;
+      border-radius: 3px;
+    }
+    .dtour-skip {
+      background: none;
+      border: none;
+      color: var(--tm);
+      font-family: var(--f);
+      font-size: 13px;
+      cursor: pointer;
+      padding: 6px 2px;
+      transition: color .2s;
+    }
+    .dtour-skip:hover { color: var(--ts); }
+    .dtour-next {
+      background: linear-gradient(135deg, var(--primary), var(--orange));
+      border: none;
+      color: #fff;
+      font-family: var(--f);
+      font-size: 13px;
+      font-weight: 700;
+      padding: 10px 22px;
+      border-radius: var(--rsm);
+      cursor: pointer;
+      box-shadow: 0 3px 14px var(--pg);
+      transition: all .18s;
+      white-space: nowrap;
+    }
+    .dtour-next:hover { opacity: .88; transform: translateY(-1px); }
+    .dtour-highlight {
+      outline: 2px solid var(--primary) !important;
+      outline-offset: 4px;
+      border-radius: var(--rsm) !important;
+      animation: dtourpulse 1.8s ease-in-out infinite;
+    }
+    @keyframes dtourpulse {
+      0%, 100% { box-shadow: 0 0 0 4px var(--pl), 0 0 14px var(--pg); }
+      50%       { box-shadow: 0 0 0 8px rgba(232,83,10,0.05), 0 0 24px var(--pg); }
+    }
   </style>
 </head>
 
@@ -1607,6 +1723,10 @@
               </svg>
               Open popup<div class="kgroup"><kbd>Alt</kbd><kbd>Shift</kbd><kbd>A</kbd></div>
             </div>
+            <div style="margin-top:10px;padding:10px 16px;background:rgba(232,83,10,.07);border:1px solid rgba(232,83,10,.18);border-radius:var(--rxs);font-size:12px;color:var(--ts);display:flex;align-items:flex-start;gap:9px">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;margin-top:1px;color:var(--primary)"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span>If <strong style="color:var(--text)">Alt+Shift+A</strong> doesn't open the popup (common on Windows due to language-switch conflict), you can reassign it. <a id="link-shortcuts" href="#" style="color:var(--primary);font-weight:600;text-decoration:none">Manage Shortcuts →</a></span>
+            </div>
           </div>
         </div>
         <div class="sg">
@@ -1672,6 +1792,22 @@
   </div>
 
   <div id="toast-s"></div>
+
+  <!-- DASHBOARD ONBOARDING TOUR -->
+  <div id="dtour-bar" style="display:none" class="dtour-bar">
+    <div class="dtour-icon" id="dtour-icon">👋</div>
+    <div class="dtour-content">
+      <div class="dtour-label" id="dtour-label">Step 1 of 6</div>
+      <div class="dtour-title" id="dtour-title"></div>
+      <div class="dtour-body" id="dtour-body"></div>
+    </div>
+    <div class="dtour-nav">
+      <div class="dtour-dots" id="dtour-dots"></div>
+      <button class="dtour-skip" id="dtour-skip">Skip tour</button>
+      <button class="dtour-next" id="dtour-next">Next →</button>
+    </div>
+  </div>
+
   <script src="crypto-utils.js"></script>
   <script src="storage-api.js"></script>
   <script src="dashboard.js"></script>

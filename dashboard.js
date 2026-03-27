@@ -447,4 +447,135 @@ document.getElementById('s-reset').addEventListener('click',async()=>{
 
 function esc(s){if(!s) return '';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-init();
+// ── Shortcut Management Link ──────────────────────────────────────────────────
+document.getElementById('link-shortcuts')?.addEventListener('click', (e) => {
+  e.preventDefault();
+  chrome.tabs.create({ url: 'chrome://extensions/shortcuts' });
+});
+
+// ── Dashboard Onboarding Tour ─────────────────────────────────────────────────
+const DASH_TOUR_STEPS = [
+  {
+    icon: '👋',
+    tab: null,
+    navTarget: null,
+    title: 'Welcome to AutoFill Pro!',
+    body: "You're in <strong>Advanced Configuration</strong>. This is where you set up your data and manage your profiles. Let's take a quick tour — it only takes a minute."
+  },
+  {
+    icon: '👤',
+    tab: 'profiles',
+    navTarget: 'profiles',
+    title: 'My Profiles',
+    body: 'Create <strong>multiple profiles</strong> — Work, Personal, University — and switch between them instantly. Each profile has its own set of fields.'
+  },
+  {
+    icon: '📝',
+    tab: 'my-fields',
+    navTarget: 'my-fields',
+    title: 'Built-in Fields',
+    body: 'Enter your <strong>name, email, phone, and address</strong> here. AutoFill Pro uses these when filling forms on any website.'
+  },
+  {
+    icon: '✨',
+    tab: 'custom-fields',
+    navTarget: 'custom-fields',
+    title: 'Custom Fields',
+    body: 'Add any field you need — <strong>Student ID, Branch, District</strong> — and AutoFill Pro will fill those too. Perfect for complex forms.'
+  },
+  {
+    icon: '🔗',
+    tab: 'url-rules',
+    navTarget: 'url-rules',
+    title: 'URL Rules',
+    body: 'Set a <strong>URL pattern</strong> (e.g. <code style="color:#60C0D0;background:rgba(0,180,220,.1);padding:1px 5px;border-radius:4px">zoom.us</code>) so AutoFill Pro automatically switches to the right profile on that site.'
+  },
+  {
+    icon: '🎉',
+    tab: null,
+    navTarget: null,
+    title: "You're all set!",
+    body: 'Start by filling in your details on the <strong>Built-in Fields</strong> tab. Use <kbd style="background:rgba(20,17,12,.8);border:1px solid #28231C;border-bottom:2px solid #3A332A;border-radius:4px;padding:1px 6px;font-size:11px">Alt+Shift+F</kbd> to fill any form instantly.',
+    isLast: true
+  }
+];
+
+let dTourStep = 0;
+
+function startDashboardTour() {
+  dTourStep = 0;
+  const bar = document.getElementById('dtour-bar');
+  bar.style.display = 'flex';
+
+  const dotsEl = document.getElementById('dtour-dots');
+  dotsEl.innerHTML = DASH_TOUR_STEPS.map((_, i) =>
+    `<div class="dtour-dot${i === 0 ? ' active' : ''}"></div>`
+  ).join('');
+
+  document.getElementById('dtour-skip').addEventListener('click', endDashboardTour);
+  document.getElementById('dtour-next').addEventListener('click', advanceDashboardTour);
+
+  renderDashboardTourStep();
+}
+
+function renderDashboardTourStep() {
+  const step = DASH_TOUR_STEPS[dTourStep];
+  const total = DASH_TOUR_STEPS.length;
+
+  document.getElementById('dtour-label').textContent = `Step ${dTourStep + 1} of ${total}`;
+  document.getElementById('dtour-icon').textContent = step.icon;
+  document.getElementById('dtour-title').textContent = step.title;
+  document.getElementById('dtour-body').innerHTML = step.body;
+  document.getElementById('dtour-next').textContent = step.isLast ? 'Done ✓' : 'Next →';
+
+  document.querySelectorAll('.dtour-dot').forEach((d, i) => {
+    d.classList.toggle('active', i === dTourStep);
+  });
+
+  // Remove any existing highlights
+  document.querySelectorAll('.dtour-highlight').forEach(el => el.classList.remove('dtour-highlight'));
+
+  // Navigate to tab and highlight nav item
+  if (step.tab) {
+    document.querySelectorAll('.nitem').forEach(l => l.classList.remove('active'));
+    document.querySelectorAll('.tpanel').forEach(p => p.classList.remove('active'));
+    const navLink = document.querySelector(`.nitem[data-tab="${step.tab}"]`);
+    const panel = document.getElementById(`tab-${step.tab}`);
+    if (navLink) { navLink.classList.add('active'); navLink.classList.add('dtour-highlight'); }
+    if (panel) panel.classList.add('active');
+    if (step.tab === 'my-fields') loadFieldsEditor();
+    if (step.tab === 'custom-fields') renderCF();
+    if (step.tab === 'history') renderHistory();
+    if (step.tab === 'url-rules') renderRules();
+  }
+}
+
+function advanceDashboardTour() {
+  const step = DASH_TOUR_STEPS[dTourStep];
+  if (step.isLast) { endDashboardTour(); return; }
+  dTourStep++;
+  renderDashboardTourStep();
+}
+
+function endDashboardTour() {
+  chrome.storage.local.set({ afp_onboarding: 'done' });
+  document.querySelectorAll('.dtour-highlight').forEach(el => el.classList.remove('dtour-highlight'));
+  const bar = document.getElementById('dtour-bar');
+  bar.style.animation = 'none';
+  bar.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+  bar.style.transform = 'translateY(100%)';
+  bar.style.opacity = '0';
+  setTimeout(() => { bar.style.display = 'none'; }, 320);
+}
+
+// ── Init (augmented with onboarding check) ────────────────────────────────────
+async function initWithTourCheck() {
+  await init();
+  chrome.storage.local.get('afp_onboarding', (res) => {
+    if (res.afp_onboarding === 'dashboard') {
+      setTimeout(() => startDashboardTour(), 600);
+    }
+  });
+}
+
+initWithTourCheck();

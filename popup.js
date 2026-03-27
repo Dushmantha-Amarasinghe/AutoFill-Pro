@@ -27,6 +27,13 @@ async function init() {
 
   await loadData();
   await scanPage();
+
+  // Check if first-time user
+  chrome.storage.local.get('afp_onboarding', (res) => {
+    if (res.afp_onboarding === 'new') {
+      setTimeout(() => startPopupTour(), 500);
+    }
+  });
 }
 
 async function loadData() {
@@ -193,3 +200,119 @@ btnRefresh.addEventListener('click', () => {
 
 // ─── Start ────────────────────────────────────────────────────────────────────
 init();
+
+// ─── Popup Onboarding Tour ────────────────────────────────────────────────────
+const POPUP_TOUR_STEPS = [
+  {
+    targetId: 'profile-select-container',
+    title: '👤 Your Active Profile',
+    body: 'This is the <strong>profile that gets used</strong> when filling forms. You can create multiple profiles — Work, Personal, University — and switch between them here.'
+  },
+  {
+    targetId: 'btn-fill',
+    title: '⚡ Fill This Page',
+    body: 'Tap this button to <strong>instantly fill all form fields</strong> on the current page using your active profile data.'
+  },
+  {
+    targetId: 'toggles',
+    title: '⚙️ Smart Options',
+    body: 'Toggle <strong>Auto-fill on page load</strong> to fill forms automatically, or enable <strong>Highlight fields</strong> to preview what gets filled.',
+    targetClass: true
+  },
+  {
+    targetId: 'btn-dashboard',
+    title: '🗂️ Add Your Data',
+    body: 'Head to <strong>Advanced Configuration</strong> to enter your name, email, phone and set up custom fields. This is where your data lives.',
+    isLast: true
+  }
+];
+
+let tourStep = 0;
+
+function liftClear() {
+  document.querySelectorAll('.tour-lifted').forEach(el => {
+    el.classList.remove('tour-lifted');
+  });
+}
+
+function startPopupTour() {
+  tourStep = 0;
+  document.getElementById('tour-overlay').classList.add('active');
+  const tooltip = document.getElementById('tour-tooltip');
+  tooltip.style.display = 'block';
+
+  const dotsEl = document.getElementById('tour-dots');
+  dotsEl.innerHTML = POPUP_TOUR_STEPS.map((_, i) =>
+    `<div class="tour-dot${i === 0 ? ' active' : ''}"></div>`
+  ).join('');
+
+  document.getElementById('tour-skip').addEventListener('click', endPopupTour);
+  document.getElementById('tour-next').addEventListener('click', advancePopupTour);
+
+  renderPopupTourStep();
+}
+
+function renderPopupTourStep() {
+  const step  = POPUP_TOUR_STEPS[tourStep];
+  const total = POPUP_TOUR_STEPS.length;
+
+  document.getElementById('tour-step-label').textContent = `Step ${tourStep + 1} of ${total}`;
+  document.getElementById('tour-title').textContent      = step.title;
+  document.getElementById('tour-body').innerHTML         = step.body;
+  document.getElementById('tour-next').textContent       = step.isLast ? "Let's Go! →" : 'Next →';
+
+  document.querySelectorAll('.tour-dot').forEach((d, i) =>
+    d.classList.toggle('active', i === tourStep));
+
+  // Remove previous lifted target
+  liftClear();
+
+  const targetEl = step.targetClass
+    ? document.getElementsByClassName(step.targetId)[0]
+    : document.getElementById(step.targetId);
+
+  const tooltip = document.getElementById('tour-tooltip');
+  tooltip.className = 'tour-tooltip'; // reset arrow class
+
+  if (targetEl) {
+    // Lift the target above the blurred overlay so it appears sharp
+    targetEl.classList.add('tour-lifted');
+
+    const r          = targetEl.getBoundingClientRect();
+    const TOOLTIP_H  = 175;
+    const GAP        = 12;
+    const spaceBelow = window.innerHeight - r.bottom;
+
+    if (spaceBelow >= TOOLTIP_H + GAP) {
+      tooltip.classList.add('arrow-up');
+      tooltip.style.top    = (r.bottom + GAP) + 'px';
+      tooltip.style.bottom = 'auto';
+    } else {
+      tooltip.classList.add('arrow-down');
+      tooltip.style.bottom = (window.innerHeight - r.top + GAP) + 'px';
+      tooltip.style.top    = 'auto';
+    }
+  }
+}
+
+function advancePopupTour() {
+  if (POPUP_TOUR_STEPS[tourStep].isLast) {
+    chrome.storage.local.set({ afp_onboarding: 'dashboard' }, () => {
+      chrome.tabs.create({ url: chrome.runtime.getURL('dashboard.html'), active: true });
+      window.close();
+    });
+    return;
+  }
+  tourStep++;
+  renderPopupTourStep();
+}
+
+function endPopupTour() {
+  chrome.storage.local.set({ afp_onboarding: 'done' });
+  liftClear();
+  document.getElementById('tour-overlay').classList.remove('active');
+  const tooltip = document.getElementById('tour-tooltip');
+  tooltip.style.opacity    = '0';
+  tooltip.style.transition = 'opacity 0.2s';
+  setTimeout(() => { tooltip.style.display = 'none'; tooltip.style.opacity = ''; }, 220);
+}

@@ -4,12 +4,16 @@
  */
 
 // ─── Context Menu ────────────────────────────────────────────────────────────
-chrome.runtime.onInstalled.addListener(() => {
+chrome.runtime.onInstalled.addListener((details) => {
   chrome.contextMenus.create({
     id: 'afp-fill',
     title: 'AutoFill Pro — Fill This Form',
     contexts: ['page', 'editable']
   });
+  // Set onboarding flag for first-time users
+  if (details.reason === 'install') {
+    chrome.storage.local.set({ afp_onboarding: 'new' });
+  }
 });
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
