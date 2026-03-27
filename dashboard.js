@@ -425,7 +425,18 @@ async function doImport(file) {
     await StorageAPI.importData(parsed.afp_export);
     appData=await StorageAPI.getData();
     activeProfileId=appData.activeProfileId;
-    updateSidebarCtx();renderProfiles();updateBadges();
+    
+    // Dynamically re-render all sections to avoid manual reload
+    updateSidebarCtx();
+    renderProfiles();
+    loadFieldsEditor(); // Built-in fields
+    renderCF();         // Custom fields
+    populateRuleSel();  // URL rules dropdown
+    renderRules();      // URL rules list
+    renderHistory();    // History
+    applySettings();    // Settings checkboxes
+    updateBadges();     // Sidebar counts
+    
     toast('Data imported successfully');
   }catch(e){toast('Import failed: '+e.message,'error');}
 }
